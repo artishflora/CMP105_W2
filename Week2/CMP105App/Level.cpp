@@ -8,7 +8,8 @@ Level::Level(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 
 	// initialise game objects
-	mousePos = sf::Mouse::getPosition();
+	mousePos.x = input->getMouseX();
+	mousePos.y = input->getMouseY();
 	_mousePos.setString("mouse coordinates: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 	dragging = false;
 	click = false;
@@ -55,13 +56,15 @@ void Level::handleInput()
 	{
 		if (!dragging)
 		{
-			dragstart = sf::Mouse::getPosition();
+			dragstart.x = input->getMouseX();
+			dragstart.y = input->getMouseY();
 			dragging = true;
 		}
 	}
 	else if (!input->isMouseLDown() && dragging)
 	{
-		dragend = sf::Mouse::getPosition();
+		dragend.x = input->getMouseX();
+		dragend.y = input->getMouseY();
 		dragging = false;
 		dragDistance(dragstart, dragend);
 	}
@@ -72,7 +75,7 @@ void Level::handleInput()
 	}
 	else if (!input->isMouseRDown() && click)
 	{
-		mpos_circ.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+		mpos_circ.setPosition((input->getMouseX()-mpos_circ.getRadius()), (input->getMouseY()-mpos_circ.getRadius()));
 		click = false;
 	}
 }
@@ -90,7 +93,8 @@ void Level::dragDistance(sf::Vector2i start, sf::Vector2i finish)
 // Update game objects
 void Level::update()
 {
-	mousePos = sf::Mouse::getPosition();
+	mousePos.x = input->getMouseX();
+	mousePos.y = input->getMouseY();
 	_mousePos.setString("mouse coordinates: " + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y));
 }
 
